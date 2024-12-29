@@ -33,9 +33,9 @@ Suppose we want to test that Wikipedia has a page about spaceport.
    EOF
    ```
 
-   Spaceport will only process the specially formatted blockquote in the file. You can freely add other Markdown content (such as background info, team details, comments) without affecting tests.
+   Spaceport will only process the specially formatted blockquote (an executable spec) in the file. You can freely add other Markdown content (such as background info, team details, comments) without affecting tests.
 
-   Don't fret if you feel like the blockquote's language is a bit tedious. 
+   Don't fret if you feel like the executable spec's language is a bit tedious. Except for two special keywords (`USE` and `GIVEN`), the rest is just natural language, written in an unambitious style. Also for practical use, Spaceport can write the executable spec for you.
 
 2. Add a Spaceport project named `wiki`:
 
@@ -108,13 +108,13 @@ We recommend installing the CLI in an isolated environment so its dependencies d
 With [pipx](https://pypa.github.io/pipx/):
 
 ```sh
-pipx install retro
+pipx install spaceport
 ```
 
 or with [uv](https://docs.astral.sh/uv/):
 
 ```sh
-uv tool install retro
+uv tool install spaceport
 ```
 
 

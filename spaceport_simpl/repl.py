@@ -203,7 +203,7 @@ class BashREPL(REPLSubject, ManagedSubject[ShellCursor]):
     Acceptable TSL headers: ``term``, ``cli``, and ``repl``.
     """
 
-    CUSTOM_PROMPT = "__WT_BASH_# "
+    CUSTOM_PROMPT = "__SP_BASH_# "
 
     def __init__(self, *, max_timeout: float = 300.0, cwd: str = "."):
         """Initialize a local bash REPL subject.

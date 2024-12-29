@@ -32,7 +32,7 @@ class SpecTranspiler:
 
     def __init__(self) -> None:
         self._op_docs = format_op_docs()
-        self._block_sep = "===WT_BLOCK_SEP==="
+        self._block_sep = "===SP_BLOCK_SEP==="
         self.system_preamble = tem(
             "transpile preamble v5", op_docs=self._op_docs, block_sep=self._block_sep
         )
