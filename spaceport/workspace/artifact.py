@@ -401,6 +401,9 @@ class Artifact:
             renamed_path = save_path.rename(
                 save_path.with_name(f"{save_path.name}.{time}")
             )
+        else:
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+            save_path.touch()
 
         cls._rewriter.clear_knowledge()
         if references:
@@ -414,8 +417,6 @@ class Artifact:
                 raise ValueError("Primary source must be a local file")
 
         output = await cls._rewriter.rewrite(primary)
-
-        save_path.touch()
         artifact = Artifact(project_name, save_path)
         artifact.metadata = ArtifactMetadata.model_validate(
             {

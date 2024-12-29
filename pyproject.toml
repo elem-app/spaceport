@@ -1,6 +1,6 @@
 [project]
 name = "spaceport"
-version = "0.1.2"
+version = "0.1.3"
 description = "Spaceport executes specs as test code"
 readme = "README.md"
 license = { file = "LICENSE" }
