@@ -1,0 +1,51 @@
+[project]
+name = "spaceport"
+version = "0.1.1"
+description = "Spaceport executes specs as test code"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [{ name = "Elementary Dev", email = "dev@elem.app" }]
+dependencies = [
+    "aiofiles>=24.1.0",
+    "anthropic>=0.41.0",
+    "click>=8.1.7",
+    "jinja2>=3.1.4",
+    "numpy>=2.2.0",
+    "openai>=1.57.0",
+    "packaging>=24.2",
+    "pydantic>=2.10.3",
+    "python-dotenv>=1.0.1",
+    "ruamel-yaml>=0.18.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=0.24.0",
+    "pytest>=8.3.3",
+]
+simpl = [
+    "docker>=7.1.0",
+    "playwright>=1.49.0",
+    "sqlalchemy>=2.0.36",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+sp = "spaceport_cli:main"
+
+[project.urls]
+Homepage = "https://github.com/elem-dev/spaceport"
+GitHub = "https://github.com/elem-dev/spaceport"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+spaceport = ["data/*"]
+
+[tool.pyright]
+exclude = [".venv"]
