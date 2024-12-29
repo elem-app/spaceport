@@ -1,6 +1,6 @@
 [project]
 name = "spaceport"
-version = "0.1.3"
+version = "0.1.4"
 description = "Spaceport executes specs as test code"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -38,8 +38,7 @@ build-backend = "setuptools.build_meta"
 sp = "spaceport_cli:main"
 
 [project.urls]
-Homepage = "https://github.com/elem-dev/spaceport"
-GitHub = "https://github.com/elem-dev/spaceport"
+GitHub = "https://github.com/elem-app/spaceport"
 
 [tool.setuptools.packages.find]
 where = ["."]
