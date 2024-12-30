@@ -403,7 +403,8 @@ class Artifact:
             )
         else:
             save_path.parent.mkdir(parents=True, exist_ok=True)
-            save_path.touch()
+        # save_path may have been renamed hence we must touch it
+        save_path.touch()
 
         cls._rewriter.clear_knowledge()
         if references:
