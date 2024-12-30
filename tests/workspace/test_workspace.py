@@ -28,7 +28,7 @@ class MockHandle(Handle):
         self.counter += 1
         yield
 
-    def size(self) -> int:
+    async def size(self) -> int:
         return 1
 
     def is_collection(self) -> bool:
