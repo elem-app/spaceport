@@ -6,19 +6,75 @@ The guides provide practical tips and examples of how to use Spaceport.
 
 It is recommended that you should read this section in order to work with Spaceport successfully.
 
+### The mental model
+
+Spaceport is an automation tool for specifying and testing the expected behavior of a system.
+
+In order to specify, it needs to help you write specs and code about the system. It does this in two steps:
+
+```
+               1. Rewriting            2. Transpiling
+┌────────────────┐       ┌────────────────┐       ┌────────────────┐
+│   References   │   →   │     Specs      │   →   │  Test Scripts  │
+│     (text)     │   →   │     (text)     │   →   │     (code)     │
+└────────────────┘       └────────────────┘       └────────────────┘
+```
+
+1. **Rewriting** is the process of generating specs from reference sources. First, feature specs are synthesized from product requirements, issues, documentation, or code for the business logic. Then, they are transformed into executable specs, which are more granular and are about design/implementation details.  
+   If you have an executable spec, you can skip this step.
+2. **Transpiling** is the process of generating test scripts from executable specs.
+
+Afterwards, Spaceport can execute the test scripts to verify the expected behavior.
+
+All the specs and test code are stored in the project's artifact file for you to review and edit.
+
 ### Working with project artifacts
 
-Each Spaceport project has an artifact that contains all the specs and their test code. It is a Markdown file that works like a Jupyter notebook--except for special blocks, the rest are commentary. Feel free to put relevant information in there to facilitate and documentation and communication.
+Each Spaceport project has an artifact that contains all the specs and their test code. It is a Markdown file that works like a Jupyter notebook--except for some special syntax for executable specs and test code, the rest are commentary. Feel free to put relevant information in there to facilitate and documentation and communication.
 
-The special blocks include:
+**Executable specs** are Markdown blockquotes that start with `>>` followed by nested lists:
 
-- Blockquotes starting with `>>` followed by nested lists are [executable specs](Reference.md#executable-specs). 
-  - Specifically, sub-bullet points after 'GIVEN' are fixtures that you need to provide. The [typical workflow](../README.md#typical-workflow) (step 4) covers how.
-  - 'USE' bullet points specify test subjects to be used in the spec. They are a unique concept in Spaceport and detailed in the [reference](Reference.md#subject-implementations).
-  - The other bullet points, as you can see, are just plain English. However, they should be written in a specific style--each point should describe exactly one user action in precise, unambiguous terms. When editing these points, you should adhere to this style and describe clearly what the user is doing.
-- Code blocks whose language identifier is `py .test` are test code that Spaceport will attempt to run.
-  - You may edit the code as you see fit--a big part of it is standard Python.
-  - The code includes special `T` functions that will be explained in the following section.
+```markdown
+>> Name of the spec
+> - GIVEN:
+>   - some fixtures
+>   - some other fixtures
+> - USE a subject to interact with
+> - Perform some actions
+```
+
+The only special markers are: 
+
+- `>>` for spec name declaration
+- List-inside-blockquote for spec content
+- `GIVEN` for fixture declarations (covered in step 4 of the [typical workflow](../README.md#typical-workflow))
+- `USE` for subject uses (see reference about [subject implementations](Reference.md#subject-implementations))
+
+The rest are just plain English. However, they should be written in a specific style--each point should describe exactly one user action in precise, unambiguous terms. When editing these points, you should adhere to this style and describe clearly what the user is doing.
+
+**Test code** are enclosed in Markdown code blocks with the language identifier `py .test` like this:
+
+````markdown
+```py .test
+T.use("container-1")
+T.set_working_dir("fs//", "tmp")
+T.create_file("fs//file.txt", "Hello, world!")
+```
+````
+
+The special `T` namespace exposes all test operations as standalone functions. We will talk about it soon.
+
+Spaceport-generated test code is placed right after its corresponding spec like this:
+
+````markdown
+>> Name of the spec
+> - ...
+> - last line of the spec
+```py .test
+T.use(...)
+T.some_op(...)
+```
+````
 
 > [!NOTE]
 > You may use Copilot or other AI assistants to help you write commentary and edit specs. But be careful when they touch the code.  
@@ -45,6 +101,7 @@ In the [reference](Reference.md#test-code), you may find more details about the 
   # Uses 'browser-1' subject
   T.goto_url("gui//", "https://example.com")
   ```
+
 - The first argument of `T.use()` is the name of the subject to use. It should appear in `sp-env.yaml` under the `subjects` section. The rest are keyword arguments passed to either the subject's class constructor or its factory's `create()` method.
 - The first argument of a normal `T` function specifies a specific component of the subject for your user to interact with. You generally do not need to modify it, but if you are unsure, refer to the [Target Search Language (TSL)](Reference.md#target-search-language-tsl) section in the reference.  
   
@@ -84,6 +141,16 @@ If a subject is provided with `T.use()`, but an error "Operation x not found on 
 
 The only fix today is to manually edit the spec or the code to remove the unsupported operation and use an alternative, based on the documentation inside `spaceport.op`. We are working on additional tooling to support faster lookup of operation usages so you can more easily find the correct operation to use.
 
+## Change AI vendors
+
+By default, Spaceport uses Claude 3.5 Sonnet for spec and code generation. Its output is of higher quality than that of Claude 3.5 Haiku and GPT-4o.
+
+The spec generation also employs an embedding model to find the most relevant reference sources for each spec. By default, it uses `text-embedding-3-small` from OpenAI.
+
+If you prefer to also use OpenAI's models for spec and code generation, you can set the the following environment variables inside `"$(sp tc get-config-dir)"/.env`:
+
+- `SPACEPORT_SPECCER_LLM_VENDOR` - The vendor of the LLM; must be one of `openai` or `anthropic`
+- `SPACEPORT_SPECCER_LLM_MODEL` - The model to use; must be a valid chat completion model from the vendor
 
 ## Testing CLI apps
 

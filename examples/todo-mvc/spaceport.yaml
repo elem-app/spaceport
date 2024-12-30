@@ -1,0 +1,4 @@
+name: todo-mvc
+projects:
+  - name: test-1
+    artifact: true

@@ -1,4 +1,4 @@
 name: wiki-search
 projects:
   - name: spaceport-on-wiki
-    artifact: wiki.md
+    artifact: true

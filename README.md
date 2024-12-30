@@ -146,7 +146,7 @@ echo "SPACEPORT_OPENAI_API_KEY=<your OpenAI API key>" >> $SPACEPORT_DOTENV
 echo "SPACEPORT_ANTHROPIC_API_KEY=<your Anthropic API key>" >> $SPACEPORT_DOTENV
 ```
 
-See [AI vendors](docs/Reference.md#ai-vendors) for changing the AI vendors if you only have access to OpenAI models.
+See [here](docs/Guides.md#change-ai-vendors) on how to change the AI vendors.
 
 ### Typical workflow
 

@@ -1,0 +1,7 @@
+factories:
+  - name: browser-factory
+    class: BrowserFactory
+subjects:
+  - name: browser
+    impl:
+      factory: browser-factory

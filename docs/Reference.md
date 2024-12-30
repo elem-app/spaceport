@@ -4,7 +4,7 @@ The reference provides an overview of the inner workings of Spaceport. It is int
 
 For practical usage, see the [guides](Guides.md).
 
-## A mental model
+## The mental model
 
 Fundamentally, Spaceport is an automation tool for specifying and testing the expected behavior of a system. Its working model can be seen as having two stages:
 
@@ -31,7 +31,17 @@ In the **execution** stage, Spaceport will dynamically load [implementation pack
 
 Another important component of testing is fixture data. Currently, fixture data has to be directly specified in the executable specs, but in the future, Spaceport will be able to 1) import fixture data from external sources, and 2) generate fixture data automatically.
 
-## Executable specs
+The following sections talk about the details of rewriting the specs, transpiling them into test code, and executing the tests.
+
+## Rewriting and the specs
+
+### The rewriting process
+
+A **Rewriter** LLM rewrites the reference sources into executable specs--in the process, it will try to understand the expected behavior of the system and enumerate most likely combinations of user actions, in both positive and negative cases. It will also point out any ambiguities in the spec.
+
+The output of the Rewriter is written into an project's artifact file. Currently, each rewriting completely overwrites any existing content, but in the future, it will be able to work incrementally, for example, by incorporating answers to the open questions.
+
+### Executable specs
 
 Executable specs are the central part of a Spaceport project. They are the source of truth for the expected behavior of a system.
 
@@ -113,33 +123,16 @@ These properties are desired:
     > - Assert there is no result
     ```
 
-## Use of LLMs
-
-Spaceport employs a broad set of LLMs. Most critically, two are used for rewriting and transpiling:
-
-1. A **Rewriter** LLM rewrites the reference sources into executable specs--in the process, it will try to understand the expected behavior of the system and enumerate most likely combinations of user actions, in both positive and negative cases. It will also point out any ambiguities in the spec.
-
-   The output of the Rewriter is written into an project's artifact file. Currently, each rewriting completely overwrites any existing content, but in the future, it will be able to work incrementally, for example, by incorporating answers to the open questions.
-
-2. A **Transpiler** LLM transforms the executable specs into code. The full documentation of `T` functions are rendered into its system prompt.
-
-### AI vendors
-
-By default, both the Rewriter and Transpiler use Claude 3.5 Sonnet for generation. It produces specs and code of higher quality than Claude 3.5 Haiku and GPT-4o do.
-
-The Rewriter also uses an embedding model to find the most relevant reference sources for each spec. By default, it uses `text-embedding-3-small` from OpenAI.
-
-If you prefer to also use OpenAI's models for rewriting and transpiling, you can set the the following environment variables inside `"$(sp tc get-config-dir)"/.env`:
-
-- `SPACEPORT_SPECCER_LLM_VENDOR` - The vendor of the LLM; must be one of `openai` or `anthropic`
-- `SPACEPORT_SPECCER_LLM_MODEL` - The model to use; must be a valid chat completion model from the vendor
-
-## Test code
+## Transpiling and the test code
 
 Spaceport runs a Python-based DSL for testing. Simply put, it is a subset of regular Python code with the special `T` functions that model what users would do with your software. 
 
 > [!NOTE]
-> The DSL is in its infancy and certain concepts are not yet stable. Also, without proper tooling, it can be hard to debug test code, especially when it comes to TSL and function signatures. We are working to improve this.
+> The DSL is in its infancy and certain concepts are not yet stable. Also, without proper tooling, it can be hard to debug test code, especially when it comes to [TSL](#target-search-language-tsl) and function signatures. We are working to improve this.
+
+### The transpiling process
+
+A **Transpiler** LLM transforms the executable specs into code. It reads an executable spec line by line and looks for the most relevant `T` function to call. A separate LLM handles [TSL](#target-search-language-tsl) expressions and another handles [`T.use()`](#tuse) calls.
 
 ### Subject implementations
 
@@ -177,7 +170,11 @@ A TSL expression is a slash-separated path that starts with ``//``, optionally p
 
 Run `sp transpile --print-preamble --tsl` to see the system prompt for generating TSL expressions. It contains more details about currently supported TSL dialects.
 
-### Test code interpreter
+### `T.use()`
+
+The `T.use()` function is used to specify which subject to use for the current test. Its first argument is a subject's name as defined in the environment manifest. The rest of the arguments should be keyword arguments and are passed to the subject's constructor.
+
+## Test execution
 
 The test code interpreter is implemented in the `spaceport.tpyi` module. Its major role is to execute `T` function calls and provide tracing information.
 
