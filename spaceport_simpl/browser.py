@@ -118,6 +118,7 @@ def _generate_part_selector(
                     condition_parts.append(f':has(label:text-is("{value}"))')
                     condition_parts.append(f':has(:text-is("{value}"))')
                 else:
+                    condition_parts.append(f'[placeholder="{value}" i]')
                     # For form controls, look for associated labels
                     condition_parts.append(
                         f':has(+ label:text-is("{value}"))'
@@ -139,6 +140,7 @@ def _generate_part_selector(
                     condition_parts.append(f':has(label:text("{value}"))')
                     condition_parts.append(f':has(:text("{value}"))')
                 else:
+                    condition_parts.append(f'[placeholder*="{value}" i]')
                     # For form controls, look for associated labels
                     condition_parts.append(
                         f':has(+ label:text("{value}"))'
@@ -197,7 +199,8 @@ class BrowserPage(Handle, browser.Navigate, gui.MouseClick, gui.TypeText, gui.Re
     @override
     async def size(self) -> int:
         if self.pw_locator:
-            await self.pw_locator.click()
+            # This is a hack to prevent the 'execution context was destroyed' error
+            await self.pw_locator.inner_html()
             return await self.pw_locator.count()
         return 0
 
