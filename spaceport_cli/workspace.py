@@ -100,20 +100,22 @@ def list(projects: tuple[str, ...]):
     from spaceport.workspace import Workspace
 
     workspace = Workspace(Path.cwd())
+    click.echo("Projects inside the workspace:")
     for name, artifact, sources, specs in workspace.list_projects(projects or None):
-        click.echo(f"{underline(bold(name))}")
-        if artifact:
-            click.echo(f"  - Artifact: {cyan(artifact)}")
-        else:
-            click.echo(f"  - {red('No artifact file')}")
-        if sources:
-            click.echo(f"  - Sources: {', '.join(map(cyan, sources))}")
-        if specs:
-            click.echo("  - Specs:")
-            for spec in specs:
-                click.echo(f"      ({spec.code_status}) {cyan(spec.name)}")
         click.echo()
-    click.echo("(spec status: (*) - test code present, ( ) - test code incomplete)")
+        click.echo(f"    {underline(bold(name))}")
+        if artifact:
+            click.echo(f"      - Artifact: {cyan(artifact)}")
+        else:
+            click.echo(f"      - {red('No artifact file')}")
+        if sources:
+            click.echo(f"      - Sources: {', '.join(map(cyan, sources))}")
+        if specs:
+            click.echo("      - Specs:")
+            for spec in specs:
+                click.echo(f"        ({spec.code_status}) {cyan(spec.name)}")
+        click.echo()
+    click.echo("(spec status: (*) - test code ready, ( ) - code not ready)")
 
 
 @click.command(options_metavar=cyan("[options]"))

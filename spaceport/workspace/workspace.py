@@ -24,7 +24,9 @@ class SpecInfo(NamedTuple):
     code_status: str
     """The status of the code generation for the spec.
 
-    May be '*' (fully transpiled) or ' ' (some blocks are not transpiled).
+    May be:
+      '*' (code ready)
+      ' ' (fixture and code not ready)
     """
 
 
