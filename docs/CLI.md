@@ -202,8 +202,8 @@ To reduce package size, certain features are not installed by default. Extension
 
 Extensions include:
 
-- `simpl.browser` - Adds subject implementation for web browsers
-- `simpl.container` - Adds subject implementation for Docker containers
+- `browser` - Adds subject implementation for web browsers
+- `container` - Adds subject implementation for Docker containers
 
 After installing an extension, if it has a corresponding env manifest template, the template will be added, unless the `--skip-post` option is used.
 

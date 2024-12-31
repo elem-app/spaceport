@@ -15,12 +15,13 @@ Even better, if your product doesn't have a proper spec (yet), Spaceport can rea
 
 Suppose we want to test that Wikipedia has a page about spaceport.
 
-0. [Install Spaceport and the `simpl.browser` extension](#installing-spaceport)
+0. [Install Spaceport and the `browser` extension](#installing-spaceport)
 
-1. Prepare a spec defining the expected behavior:
+1. Prepare a spec defining the expected behavior. Use your favorite text editor to create a `wiki.md` file with the following content:
 
-   ```sh
-   cat << 'EOF' > wiki.md
+   ```markdown
+   ## Spaceport on Wikipedia
+
    Wikipedia should have a page about "spaceport".
 
    >> Searching for "spaceport" yields a Wikipedia page
@@ -30,12 +31,9 @@ Suppose we want to test that Wikipedia has a page about spaceport.
    > - Go to the Wikipedia homepage
    > - Input "spaceport" into the search bar and click the search button
    > - Verify the new page's heading contains "spaceport"
-   EOF
    ```
 
-   Spaceport will only process the specially formatted blockquote (an executable spec) in the file. You can freely add other Markdown content (such as background info, team details, comments) without affecting tests.
-
-   Don't fret if you feel like the executable spec's language is a bit tedious. Except for two special keywords (`USE` and `GIVEN`), the rest is just natural language, written in an unambitious style. Also for practical use, Spaceport can write the executable spec for you.
+   Spaceport uses a minimal set of special syntax (`>>`, `> -`, `GIVEN`, and `USE`), and the rest is just plain English. The writing style has to be detailed and unambiguous. Don't worry if this seems tedious - Spaceport can automatically generate these detailed specs for you.
 
 2. Add a Spaceport project named `wiki`:
 
@@ -49,7 +47,7 @@ Suppose we want to test that Wikipedia has a page about spaceport.
    sp code wiki
    ```
 
-   The generated code is written into `wiki.md` right after the blockquote.
+   The generated code is written into `wiki.md` right after the blockquote. Yes, you do not need to manually write implementations for the specs.
 
 4. Run the test:
 
@@ -61,9 +59,9 @@ Suppose we want to test that Wikipedia has a page about spaceport.
 
 At its core, Spaceport performs three tasks:
 
-1. Writing feature specs and [executable specs](docs/Reference.md#executable-specs) based on less-structured reference sources
-2. Generating [test code](docs/Reference.md#test-code) from executable specs
-3. Running the test code in dedicated test environments
+1. **Writing specs** - Including feature specs and [executable specs](docs/Reference.md#executable-specs) based on less-structured reference sources
+2. **Generating [test code](docs/Reference.md#test-code)** - From executable specs
+3. **Running tests** - In dedicated test environments
 
 The first two tasks make use of LLMs. The third task relies on a built-in library that provides functionality for interacting with various types of test subjects.
 
@@ -71,7 +69,7 @@ A feature spec is, a specification of features, that describes their expected be
 
 Enter the executable spec. It is a semi-structured break-down of _expected behavior_ into clear, imperative steps. Each step precisely describes what action should a user take and what outcome should be observed.
 
-For example, this is a feature spec:
+For example, this can be a feature spec:
 
 - Spaceport CLI allows users to initialize a workspace
 
@@ -80,15 +78,27 @@ And this is an executable spec:
 ```markdown
 > - USE a shell terminal
 > - Type `sp init` and press Enter
-> - Check that Spaceport workspace files are created
+> - USE a file system
+> - Check that a workspace manifest is created
 ```
 
-Combined with the feature spec, executable specs serve multiple purposes:
+The LLMs are designed to generate executable specs that are as detailed as possible, and then translate them into a Python DSL. The Python DSL allows for easy encapsulation of the rich testing functionality provided by various frameworks like Playwright and SQLAlchemy.
 
-- They bridge high-level product requirements to low-level test details
-- They act as an intermediary between human-readable documentation and programmatic test code
-- They facilitate collaboration between technical and non-technical team members
-- They serve as living documentation that stays in sync with the actual system behavior
+For example, the above spec can be translated line-by-line into the following code:
+
+```py .test
+# With the terminal
+T.use("terminal")
+T.input_text("term//input", "sp init")
+T.input_enter("term//input")
+T.wait_till_complete("term//")
+
+# With the file system
+T.use("fs")
+T.has_some("fs//spaceport.yaml")
+```
+
+Spaceport then loads actual implementations of these `T` functions and runs the test.
 
 ## Quick start
 
@@ -99,7 +109,7 @@ Combined with the feature spec, executable specs serve multiple purposes:
 - Anthropic API key (strongly recommended for spec and code generation; can be replaced with OpenAI's API key)
 - OpenAI API key (required for text embedding)
 
-### Installing Spaceport
+### Installation
 
 #### Step 1. Install the CLI
 
@@ -117,8 +127,6 @@ or with [uv](https://docs.astral.sh/uv/):
 uv tool install spaceport
 ```
 
-
-
 #### Step 2. Install extensions (optional)
 
 To reduce package size, some testing functionality is implemented as extensions. You can install them with the following command:
@@ -129,9 +137,9 @@ sp tc install <extension>...
 
 Available extensions are:
 
-- `simpl.container` - For testing in Docker containers - you also need to have Docker installed
-- `simpl.browser` - For testing web applications
-- `simpl.sqldb` - For testing SQL databases
+- `container` - For testing in Docker containers - you also need to have Docker installed
+- `browser` - For testing web applications
+- (WIP) `sqldb` - For testing SQL databases
 
 #### Step 3. Set up API keys
 
