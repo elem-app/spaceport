@@ -9,9 +9,9 @@ from spaceport.globals import get_global_config_dir
 from ._util import cyan, get_exts_path
 
 DEPS = {
-    "simpl.browser": ["playwright>=1.49.0"],
-    "simpl.sqldb": ["sqlalchemy>=2.0.0"],
-    "simpl.container": ["docker>=7.1.0"],
+    "browser": ["playwright>=1.49.0"],
+    "sqldb": ["sqlalchemy>=2.0.0"],
+    "container": ["docker>=7.1.0"],
 }
 
 
@@ -24,10 +24,10 @@ class _PostExec(tuple[str, ...]):
 
 
 POSTS = {
-    "simpl.container": [
+    "container": [
         _PostExec(("sp", "env", "add-manifest", "container")),
     ],
-    "simpl.browser": [
+    "browser": [
         _PostExecPy(("playwright", "install")),
         _PostExec(("sp", "env", "add-manifest", "browser")),
     ],
