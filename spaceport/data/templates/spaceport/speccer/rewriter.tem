@@ -30,16 +30,6 @@ The iterative process is as follows:
 - Focus on technical ambiguities that block writing specifications
 - Phrase as specific questions about behavior/requirements
 - Ask about fixture requirements if the fixture format is complex and unclear from the source docs
-
-<fixture_complexity_signals>
-- Complex verification conditions
-- Data with specific format requirements (timestamps, UUIDs, etc.)
-- Domain-specific validation rules
-- Inter-related data requirements
-- Performance-related data volumes
-- Security or compliance requirements
-- Integration with external systems
-</fixture_complexity_signals>
 </open_questions>
 
 <executable_specifications>
@@ -62,24 +52,14 @@ Executable specifications are prescriptive instructions for how to verify the de
 - Ensure the specifications are independent and self-contained
 
 3. Test Context Management
-- Use a `GIVEN` step at the beginning to describe the fixtures needed for the specification with short descriptions; prefer simple types over nested data structures; do not spell out the details of the fixtures
+- Use a `GIVEN` step at the beginning to describe the fixtures needed for the specification with short descriptions; prefer simple types over nested data structures
 - Example of a `GIVEN` step:
   ```
   > - GIVEN:
   >   - valid user email
-  >   - valid user password
-  >   - response schema after login
-  ```
-  Example of an anti-pattern:
-  ```
-  > - GIVEN:
-  >   - a user with:
-  >     - valid email of 'acme.com' domain
-  >     - valid password between 8 and 16 characters
   >   - a response message that contains a JSON object with the following fields:
   >     - `status` with value `success` or `failure`
   >     - `message` with value `Login successful` or `Login failed`
-  >     - `data` with value `null`
   ```
 - Use the `USE` keyword to establish test contexts; let the test infrastructure handle resource lifecycle management
 - Example of a `USE` step:
@@ -104,10 +84,18 @@ Executable specifications are prescriptive instructions for how to verify the de
 - Keep specification actions focused and atomic
 
 4. Fixture Handling
-- When specifications require test data or fixtures either as inputs or expected outputs:
-  * DO NOT make assumptions about valid data formats, ranges, or requirements
-  * ALWAYS mark fixture requirements as questions if not explicitly specified in source docs
+- Consider these as fixtures:
+  * Complex verification conditions, like assertions about a nested data structure or a special file format
+  * Files or database tables that are required by the system
+  * Data with specific format requirements (timestamps, UUIDs, etc.)
+  * Domain-specific validation rules
+  * Inter-related data requirements
+  * Performance-related data volumes
+  * Security or compliance requirements
+  * Integration with external systems
 - Generate 'GIVEN' sub-bullets and let humans provide the actual fixture data requirements rather than guessing
+  * Even if you feel like you understand the fixture requirements, still generate a 'GIVEN' bullet for it and lay out your understanding
+  * REMEMBER: conditions are fixtures; DO INCLUDE implicit conditions that are seemingly easy to verify but require detailed verification
 - Focus on WHAT fixtures are needed and its nature, e.g., one or more file(s), a structured document, a DB row, a literal value of certain type, a verification condition, an expected state, etc.
 
 5. Interactive Context Management
@@ -153,7 +141,6 @@ Executable specifications are prescriptive instructions for how to verify the de
 >> [Title of the specification]
 > - [Step 1]
 > - [Step 2]
-> - [Step 3]
 ```
 </artifact_format>
 
@@ -190,9 +177,7 @@ Arguments:
 <QUERY>What is a executable spec format Untro CLI Untropy transpilation</QUERY>
 <QUERY>Untropy language syntax operations features definition</QUERY>
 <QUERY>Untro test project execution process parallel sequential output results</QUERY>
-<QUERY>Untro project structure organization files directories dependencies</QUERY>
-<QUERY>Untro test command error handling invalid projects</QUERY>
-<QUERY>Untro scripts run verification</QUERY>
+[...other queries...]
 </assistant_message_1>
 
 <user_message_2>
@@ -214,18 +199,11 @@ An UntroMD is a Markdown file that contains specific metadata, executable specif
 Untropy is a subset of Python with an implicitly imported `U` package. 
 </CONTENT>
 </CONTEXT>
-<CONTEXT>
-<DOC_TITLE>Untro overarching design</DOC_TITLE>
-<CONTENT>
-The reports of completed scripts are collected and written to the 'logs' database.
-</CONTENT>
-</CONTEXT>
-
 [...other contexts...]
 </user_message_2>
 
 <assistant_message_2>
-[...other queries...]
+[...more queries...]
 </assistant_message_2>
 
 <user_message_3>
@@ -243,7 +221,6 @@ Untro CLI provides a test command that tests project scripts. [...other part of 
 
 ## Open Questions
 - What are the contents of a project?
-- Where is a project's data stored?
 [...other questions]
 
 ## Executables
@@ -260,7 +237,7 @@ We need to test the `untro test` command with one project.
 > - USE a SQL DB to access the logs database
 > - Verify that all scripts are run
 
-### [...other executable specifications]
+[...other executable specifications]
 </ARTIFACT>
 </assistant_message_3>
 

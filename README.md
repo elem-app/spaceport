@@ -1,6 +1,6 @@
 # Spaceport
 
-> [!WARNING]
+> [!IMPORTANT]
 > Spaceport is currently a proof-of-concept. The documentation may be incomplete and the features are unstable and not well-tested.
 
 Spaceport is a novel approach to automating system and end-to-end testing.
@@ -197,6 +197,10 @@ Run `sp add` to add a project to the workspace and specify its primary and other
 ```sh
 sp add <project name> -p <primary source> -o <other source 1> -o <other source 2> ...
 ```
+
+> [!IMPORTANT]
+> Currently, because of the output token limit of Claude, the primary source should not be too long, otherwise the generated specs may be incomplete or miss certain details.  
+> A recommended length of the primary source is 1000-1500 tokens.
 
 #### Step 3. Generate specs
 
