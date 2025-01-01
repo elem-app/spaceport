@@ -1,0 +1,4 @@
+name: rename-a-project
+projects:
+  - name: old-project
+    artifact: true

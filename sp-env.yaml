@@ -1,0 +1,10 @@
+factories:
+  - name: container-factory
+    class: ContainerFactory
+    params:
+      dockerfile: fixtures/sp-cli/Dockerfile
+      auto_remove: container
+subjects:
+  - name: container
+    impl:
+      factory: container-factory

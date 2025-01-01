@@ -1,0 +1,10 @@
+subjects:
+  - name: term
+    impl:
+      class: BashREPL
+  - name: fs
+    impl:
+      class: FS
+  - name: sdoc-editor
+    impl:
+      class: SDocEditor

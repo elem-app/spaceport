@@ -1,0 +1,8 @@
+name: spaceport
+projects:
+  - name: sp-cli
+    sources:
+      primary: docs/CLI-short.md
+      other:
+        - README.md
+        - docs/Reference.md
