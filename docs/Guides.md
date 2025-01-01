@@ -6,6 +6,9 @@ The guides provide practical tips and examples of how to use Spaceport.
 
 It is recommended that you should read this section in order to work with Spaceport successfully.
 
+> [!IMPORTANT]
+> If you don't feel like reading before debugging your test, just [email me](mailto:dunl@elem.app) and I'll get back when I'm awake.
+
 ### The mental model
 
 Spaceport is an automation tool for specifying and testing the expected behavior of a system.

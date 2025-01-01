@@ -138,7 +138,7 @@ sp tc install <extension>...
 Available extensions are:
 
 - `container` - For testing in Docker containers - you also need to have Docker installed
-- `browser` - For testing web applications
+- `browser` - For testing web applications - NOTE that this installation can be slow as it pulls down Playwright; I forgot to implement a progress bar so please wait for a while if it seems stuck...
 - (WIP) `sqldb` - For testing SQL databases
 
 #### Step 3. Set up API keys
