@@ -450,7 +450,8 @@ class ContainerFactory(SubjectFactory[ContainerHandle]):
 
         :param copy_from_host: An optional list of strings where each string is a
             path to a file or directory on the host. The file or directory will be
-            copied into the container under the same path.
+            copied into the container under the same path. If a workspace directory
+            is provided as a fixture, prefer to add that directory to this argument.
         """
         docker_container = self.docker_client.containers.run(self.image, detach=True)
         while docker_container.status != "running":
