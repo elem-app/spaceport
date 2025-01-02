@@ -150,7 +150,7 @@ By default, Spaceport uses Claude 3.5 Sonnet for spec and code generation. Its o
 
 The spec generation also employs an embedding model to find the most relevant reference sources for each spec. By default, it uses `text-embedding-3-small` from OpenAI.
 
-If you prefer to also use OpenAI's models for spec and code generation, you can set the the following environment variables inside `"$(sp tc get-config-dir)"/.env`:
+If you prefer to also use OpenAI's models for spec and code generation, you can set the following environment variables inside `"$(sp tc get-config-dir)"/.env`:
 
 - `SPACEPORT_SPECCER_LLM_VENDOR` - The vendor of the LLM; must be one of `openai` or `anthropic`
 - `SPACEPORT_SPECCER_LLM_MODEL` - The model to use; must be a valid chat completion model from the vendor
