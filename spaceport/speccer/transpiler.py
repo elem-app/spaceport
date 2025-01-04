@@ -28,7 +28,7 @@ class TargetTSL(NamedTuple):
 
 
 class SpecTranspiler:
-    """Provides functionality to transpile executable specs into test code."""
+    """Provides functionality to transpile testable specs into test code."""
 
     def __init__(self) -> None:
         self._op_docs = format_op_docs()
@@ -60,9 +60,9 @@ class SpecTranspiler:
         ]
 
     async def transpile(self, spec: str) -> str:
-        """Transpile an executable spec into test code.
+        """Transpile a testable spec into test code.
 
-        :param spec: The executable spec to transpile.
+        :param spec: The testable spec to transpile.
         :returns: The test code.
         """
         tsl_tasks: list[asyncio.Task[list[TargetTSL]]] = []
@@ -100,7 +100,7 @@ class SpecTranspiler:
         return extract_tagged(resp, "[SCRIPT]")
 
     async def transpile_blocks(self, blocks: Sequence[Sequence[str]]) -> Iterator[str]:
-        """Transpile a list of executable spec blocks into test code.
+        """Transpile a list of testable spec blocks into test code.
 
         :param blocks: The blocks to transpile. A block comprises a sequence of lines.
         :returns: An iterator of test code, each item corresponding to an input block.

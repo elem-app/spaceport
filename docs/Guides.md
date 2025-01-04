@@ -23,9 +23,9 @@ In order to specify, it needs to help you write specs and code about the system.
 └────────────────┘       └────────────────┘       └────────────────┘
 ```
 
-1. **Rewriting** is the process of generating specs from reference sources. First, feature specs are synthesized from product requirements, issues, documentation, or code for the business logic. Then, they are transformed into executable specs, which are more granular and are about design/implementation details.  
-   If you have an executable spec, you can skip this step.
-2. **Transpiling** is the process of generating test scripts from executable specs.
+1. **Rewriting** is the process of generating specs from reference sources. First, feature specs are synthesized from product requirements, issues, documentation, or code for the business logic. Then, they are transformed into testable specs, which are more granular and are about design/implementation details.  
+   If you have a testable spec, you can skip this step.
+2. **Transpiling** is the process of generating test scripts from testable specs.
 
 Afterwards, Spaceport can execute the test scripts to verify the expected behavior.
 
@@ -33,9 +33,9 @@ All the specs and test code are stored in the project's artifact file for you to
 
 ### Working with project artifacts
 
-Each Spaceport project has an artifact that contains all the specs and their test code. It is a Markdown file that works like a Jupyter notebook--except for some special syntax for executable specs and test code, the rest are commentary. Feel free to put relevant information in there to facilitate and documentation and communication.
+Each Spaceport project has an artifact that contains all the specs and their test code. It is a Markdown file that works like a Jupyter notebook--except for some special syntax for testable specs and test code, the rest are commentary. Feel free to put relevant information in there to facilitate and documentation and communication.
 
-**Executable specs** are Markdown blockquotes that start with `>>` followed by nested lists:
+**Testable specs** are Markdown blockquotes that start with `>>` followed by nested lists:
 
 ```markdown
 >> Name of the spec
@@ -118,7 +118,7 @@ However, since `T` functions are quite "magic", it can be hard to see why a part
 
 #### Missing `T.use()`
 
-Spaceport may fail to generate a "USE" bullet point in the executable spec, and subsequently miss out on the `T.use()` call during transpilation. If you see an error message saying "No subject provided" or "Operation x not found on handle", it is likely that a `T.use()` call should be added before the failed statement.
+Spaceport may fail to generate a "USE" bullet point in the testable spec, and subsequently miss out on the `T.use()` call during transpilation. If you see an error message saying "No subject provided" or "Operation x not found on handle", it is likely that a `T.use()` call should be added before the failed statement.
 
 #### Incorrect relative paths
 

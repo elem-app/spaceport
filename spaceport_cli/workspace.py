@@ -148,7 +148,7 @@ def make(all: bool, projects: tuple[str, ...]):
 @click.option(
     "--all",
     is_flag=True,
-    help="Generate code for all executable specs in the workspace.",
+    help="Generate code for all testable specs in the workspace.",
 )
 @click.argument("projects", nargs=-1, metavar=cyan("[<project>...]"))
 @click.option(
@@ -156,10 +156,10 @@ def make(all: bool, projects: tuple[str, ...]):
     "--spec",
     multiple=True,
     metavar=cyan("<spec>"),
-    help="Specify specs to generate code for; if omitted, will generate code for all executable specs in the project(s).",
+    help="Specify specs to generate code for; if omitted, will generate code for all testable specs in the project(s).",
 )
 def code(all: bool, projects: tuple[str, ...], spec: tuple[str, ...]):
-    """Generate test code for executable specs.
+    """Generate test code for testable specs.
 
     Generated code are written into the project artifacts.
     """

@@ -9,10 +9,10 @@ created_at: 2024-12-31 13:20:46.144276+00:00
 ---
 
 ## Summary
-Spaceport CLI (sp) is a command line tool for managing workspaces and projects, and for generating and testing executable specifications. It provides commands for:
+Spaceport CLI (sp) is a command line tool for managing workspaces and projects, and for generating and testing testable specifications. It provides commands for:
 - Initializing workspaces
 - Adding/renaming projects
-- Generating executable specifications and test code
+- Generating testable specifications and test code
 - Running tests
 - Listing projects and specs
 
@@ -20,19 +20,19 @@ Spaceport CLI (sp) is a command line tool for managing workspaces and projects, 
 - A workspace is represented by a spaceport.yaml file
 - Projects can be added either with an artifact file or with primary/other source files
 - Test results can be output in human-readable, JSON, or JUnit XML formats
-- The `sp make` command generates executable specs for projects
+- The `sp make` command generates testable specs for projects
 - The `sp code` command generates test code from specs
 - The `sp test` command runs tests for specified specs or all specs in a project
 
 ## Open Questions
 - What is the format/schema of spaceport.yaml?
 - What is the default path pattern for artifact files?
-- What is the format of executable specifications?
+- What is the format of testable specifications?
 - What is the format of test code?
 - What information is included in the test results output formats?
 - Are there any naming constraints for projects and specs?
 
-## Executables
+## Testable Specs
 ### Workspace Initialization
 >> Initialize a new workspace
 > - GIVEN:

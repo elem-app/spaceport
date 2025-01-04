@@ -23,13 +23,13 @@ The **transformation** stage involves two steps:
 
 This architecture allows gradual structuralization of text into code. 
 
-Rewriting is the process of generating specs from reference sources. First, feature specs are synthesized from product requirements, issues, documentation, or code for the business logic. Then, they are transformed into executable specs, which are more granular and are about design/implementation details. [Executable spec](#executable-specs) is to Spaceport as an IR is to a compiler. Without this "IR", direct transpilation from natural language into code is possible but highly inefficient and unstable.
+Rewriting is the process of generating specs from reference sources. First, feature specs are synthesized from product requirements, issues, documentation, or code for the business logic. Then, they are transformed into testable specs, which are more granular and are about design/implementation details. [Testable spec](#testable-specs) is to Spaceport as an IR is to a compiler. Without this "IR", direct transpilation from natural language into code is possible but highly inefficient and unstable.
 
-Transpiling is the process of generating test scripts from executable specs. The output code is written in a [Python DSL](#test-code). It allows for easier encapsulation of a diverse range of user interactions with the system under test. Much of a test script are special function calls under the `T` namespace, like `T.click("gui//button")` or `T.read_text("fs//file.txt")`. As their names suggest, they describe your user's actions and expectations when working with your software.
+Transpiling is the process of generating test scripts from testable specs. The output code is written in a [Python DSL](#test-code). It allows for easier encapsulation of a diverse range of user interactions with the system under test. Much of a test script are special function calls under the `T` namespace, like `T.click("gui//button")` or `T.read_text("fs//file.txt")`. As their names suggest, they describe your user's actions and expectations when working with your software.
 
 In the **execution** stage, Spaceport will dynamically load [implementation packages](#subject-implementations) of the `T` namespace--this decoupling makes it very easy to swap between different implementations that may run in different test environments (containerized vs. local), target different systems (web vs. desktop), or rely on different libraries (Selenium vs. Playwright). Test scripts and the [environment manifest](#environment-manifest) guide the implementations to properly set up test contexts--like spinning up a browser, connecting to a database, launching a container--and release resources after tests are done.
 
-Another important component of testing is fixture data. Currently, fixture data has to be directly specified in the executable specs, but in the future, Spaceport will be able to 1) import fixture data from external sources, and 2) generate fixture data automatically.
+Another important component of testing is fixture data. Currently, fixture data has to be directly specified in the testable specs, but in the future, Spaceport will be able to 1) import fixture data from external sources, and 2) generate fixture data automatically.
 
 The following sections talk about the details of rewriting the specs, transpiling them into test code, and executing the tests.
 
@@ -37,19 +37,19 @@ The following sections talk about the details of rewriting the specs, transpilin
 
 ### The rewriting process
 
-A **Rewriter** LLM rewrites the reference sources into executable specs--in the process, it will try to understand the expected behavior of the system and enumerate most likely combinations of user actions, in both positive and negative cases. It will also point out any ambiguities in the spec.
+A **Rewriter** LLM rewrites the reference sources into testable specs--in the process, it will try to understand the expected behavior of the system and enumerate most likely combinations of user actions, in both positive and negative cases. It will also point out any ambiguities in the spec.
 
 The output of the Rewriter is written into an project's artifact file. Currently, each rewriting completely overwrites any existing content, but in the future, it will be able to work incrementally, for example, by incorporating answers to the open questions.
 
-### Executable specs
+### Testable specs
 
-Executable specs are the central part of a Spaceport project. They are the source of truth for the expected behavior of a system.
+Testable specs are the central part of a Spaceport project. They are the source of truth for the expected behavior of a system.
 
-Executable specs follow a specific Markdown format and a (natural) language standard.
+Testable specs follow a specific Markdown format and a (natural) language standard.
 
 #### Format
 
-An executable specification consists of one or more Markdown blockquotes that conform to the following rules:
+An testable specification consists of one or more Markdown blockquotes that conform to the following rules:
 
 - An optional first line that starts with `>>`; this line declares the start of a specification and its name
 - The other lines must start with `> -` (a bullet list item in a blockquote) or is a sub-bullet
@@ -83,11 +83,11 @@ Blockquotes without a spec name declaration are considered continuations of the 
 
 #### Language standard
 
-Every executable spec is transpiled into program code. The higher the quality of the language of the specification, the more likely the transpiled code is to be correct. Executable specification thus are required to follow a language standard to ensure their quality.
+Every testable spec is transpiled into program code. The higher the quality of the language of the specification, the more likely the transpiled code is to be correct. Testable specification thus are required to follow a language standard to ensure their quality.
 
 These properties are desired:
 
-- **Precise** - An executable spec should explicitly state both the action to be performed and its target
+- **Precise** - An testable spec should explicitly state both the action to be performed and its target
     
     Good:
     
@@ -101,7 +101,7 @@ These properties are desired:
     - Run search
     - Verify the results
 
-- **Comprehensive** - Executable specs in a project, collectively, should consider both the positive and negative cases
+- **Comprehensive** - Testable specs in a project, collectively, should consider both the positive and negative cases
     
     Example:
 
@@ -132,7 +132,7 @@ Spaceport runs a Python-based DSL for testing. Simply put, it is a subset of reg
 
 ### The transpiling process
 
-A **Transpiler** LLM transforms the executable specs into code. It reads an executable spec line by line and looks for the most relevant `T` function to call. A separate LLM handles [TSL](#target-search-language-tsl) expressions and another handles [`T.use()`](#tuse) calls.
+A **Transpiler** LLM transforms the testable specs into code. It reads a testable spec line by line and looks for the most relevant `T` function to call. A separate LLM handles [TSL](#target-search-language-tsl) expressions and another handles [`T.use()`](#tuse) calls.
 
 ### Subject implementations
 
@@ -203,16 +203,16 @@ async with handle.bind():
 
 ### Project artifacts
 
-Each Spaceport project should have a project artifact, which is the source of truth for executable specs and test code.
+Each Spaceport project should have a project artifact, which is the source of truth for testable specs and test code.
 
-A project artifact is just a Markdown file with special syntax for executable specs and test code. Artifacts generated by Spaceport usually contain the following sections:
+A project artifact is just a Markdown file with special syntax for testable specs and test code. Artifacts generated by Spaceport usually contain the following sections:
 
 - A summary section that summarizes the project being specified and tested
 - A details section that describes its behavior in more detail
 - An open questions section that lists the open questions that the Rewriter could not answer and needs further clarification
-- An executables section that contains the executable specs and other commentary content
+- A testable specs section that contains the testable specs and other commentary content
 
-After transpliation, test code will be inserted into the executables section, right after corresponding executable specs.
+After transpliation, test code will be inserted into the testable specs section, right after corresponding testable specs.
 
 You generally do not need to edit a project artifact's metadata, and only need to edit its content when Spaceport's LLMs are not working as expected.
 

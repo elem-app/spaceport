@@ -1,6 +1,6 @@
 # Spaceport CLI
 
-Spaceport CLI is a command line interface for the Spaceport framework. It features a set of commands for managing workspaces and projects, and for generating and testing executable specifications.
+Spaceport CLI is a command line interface for the Spaceport framework. It features a set of commands for managing workspaces and projects, and for generating and testing testable specifications.
 
 ## Workspace commands
 
@@ -39,15 +39,15 @@ This command will run `sp init` first if `spaceport.yaml` does not exist in the 
 
 `-p <path>`  
 `--primary <path>`  
-&nbsp;&nbsp;&nbsp;&nbsp;The path to the primary source of the project. This is the source that will be used as a starting point to generate the executable specifications.  
+&nbsp;&nbsp;&nbsp;&nbsp;The path to the primary source of the project. This is the source that will be used as a starting point to generate the testable specifications.  
 &nbsp;&nbsp;&nbsp;&nbsp;Cannot be used with the `-a` option.
 
 `-o <path>`  
 `--other <path>`  
-&nbsp;&nbsp;&nbsp;&nbsp;The path to the other source of the project. This option can be repeated multiple times to add multiple other sources. These are the sources that will be used as references to generate the executable specifications.  
+&nbsp;&nbsp;&nbsp;&nbsp;The path to the other source of the project. This option can be repeated multiple times to add multiple other sources. These are the sources that will be used as references to generate the testable specifications.  
 &nbsp;&nbsp;&nbsp;&nbsp;Cannot be used with the `-a` option.
 
-### Generating executable specifications
+### Generating testable specifications
 
 #### Synopsis
 
@@ -57,12 +57,12 @@ sp make [options] [<project>...]
 
 #### Description
 
-Generates executable specs for the given projects.
+Generates testable specs for the given projects.
 
 #### Options
 
 `--all`  
-&nbsp;&nbsp;&nbsp;&nbsp;Generates executable specs for all projects in the workspace.  
+&nbsp;&nbsp;&nbsp;&nbsp;Generates testable specs for all projects in the workspace.  
 &nbsp;&nbsp;&nbsp;&nbsp;Cannot be used when any project is specified.
 
 ### Generating test code

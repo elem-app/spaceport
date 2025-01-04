@@ -282,7 +282,7 @@ class Workspace:
     ) -> Sequence[TestReport]:
         """Test the given specs of a project.
 
-        If no specs are given, will test all executable specs in the project.
+        If no specs are given, will test all testable specs in the project.
         """
         manifest = self._load_manifest(self._root_dir)
 

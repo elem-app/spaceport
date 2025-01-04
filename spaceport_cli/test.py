@@ -39,7 +39,7 @@ def test(
     json_output: str | None,
     junit_xml_output: str | None,
 ):
-    """Test executable specs in projects.
+    """Test testable specs in projects.
 
     Prints a human-readable summary to stdout by default.
     """
